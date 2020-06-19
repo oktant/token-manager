@@ -9,13 +9,41 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class TokenManagerProperties {
-    public static String userId;
-    public static String machineRole;
-    public static String adminRole;
-    public static String userRole;
-    public static String keycloakUrl;
-    public static SecurityContext securityContext;
-    public static RestTemplate restTemplate;
+    private static String userId;
+    private static String machineRole;
+    private static String adminRole;
+    private static String userRole;
+    private static String keycloakUrl;
+    private static SecurityContext securityContext;
+    private static RestTemplate restTemplate;
+
+    public static String getUserId() {
+        return userId;
+    }
+
+    public static String getMachineRole() {
+        return machineRole;
+    }
+
+    public static String getAdminRole() {
+        return adminRole;
+    }
+
+    public static String getUserRole() {
+        return userRole;
+    }
+
+    public static String getKeycloakUrl() {
+        return keycloakUrl;
+    }
+
+    public static SecurityContext getSecurityContext() {
+        return securityContext;
+    }
+
+    public static RestTemplate getRestTemplate() {
+        return restTemplate;
+    }
 
     public static void setUp() throws IOException {
         Properties prop = readPropertiesFile();
