@@ -26,8 +26,8 @@ public class TokenManagerProperties {
         KEYCLOAK_URL = prop.getProperty("de.devhq.keycloak.url");
         SECURITY_CONTEXT = SecurityContextHolder.getContext();
         REST_TEMPLATE = new RestTemplate();
-
-
+    }
+    private TokenManagerProperties(){
     }
 
     public static java.util.Properties readPropertiesFile(String fileName) throws IOException {

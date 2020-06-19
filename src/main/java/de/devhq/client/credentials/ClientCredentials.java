@@ -6,15 +6,12 @@ import de.devhq.model.TokenCollection;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
-
 import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 import java.util.Objects;
 
 
 public class ClientCredentials {
-    private static TokenCollection tokenCollection;
 
     private ClientCredentials()  {
     }
