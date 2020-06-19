@@ -31,12 +31,12 @@ public class ClientCredentialsTest {
     @Before
     public void setUp(){
         restTemplate=mock(RestTemplate.class);
-        ReflectionTestUtils.setField(tokenManagerProperties, "USER_ID", "gitlab_user_id");
-        ReflectionTestUtils.setField(tokenManagerProperties, "MACHINE_ROLE", "MACHINE_ROLE");
-        ReflectionTestUtils.setField(tokenManagerProperties, "ADMIN_ROLE", "ADMIN_ROLE");
-        ReflectionTestUtils.setField(tokenManagerProperties, "USER_ROLE", "USER_ROLE");
-        ReflectionTestUtils.setField(tokenManagerProperties, "KEYCLOAK_URL", "dasd");
-        ReflectionTestUtils.setField(tokenManagerProperties, "REST_TEMPLATE", restTemplate);
+        ReflectionTestUtils.setField(tokenManagerProperties, "USERID", "gitlab_user_id");
+        ReflectionTestUtils.setField(tokenManagerProperties, "MACHINEROLE", "MACHINE_ROLE");
+        ReflectionTestUtils.setField(tokenManagerProperties, "ADMINROLE", "ADMIN_ROLE");
+        ReflectionTestUtils.setField(tokenManagerProperties, "USERROLE", "USER_ROLE");
+        ReflectionTestUtils.setField(tokenManagerProperties, "KEYCLOAKURL", "dasd");
+        ReflectionTestUtils.setField(tokenManagerProperties, "RESTTEMPLATE", restTemplate);
 
     }
     @Test(expected = AuthenticationException.class)
@@ -51,7 +51,7 @@ public class ClientCredentialsTest {
         map.add("client_id","client_id");
         map.add("client_secret", "client_secret");
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAK_URL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
+        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAKURL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
 
         assertEquals(tokenCollection.getAccessToken(),ClientCredentials.getHttpHeaders("client_id", "client_secret").get("Authorization").get(0));
     }
@@ -68,7 +68,7 @@ public class ClientCredentialsTest {
         map.add("client_id","client_id");
         map.add("client_secret", "client_secret");
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAK_URL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
+        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAKURL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
 
         assertEquals(tokenCollection.getAccessToken(),ClientCredentials.getHttpHeaders("client_id", "client_secret").get("Authorization").get(0));
     }
@@ -85,7 +85,7 @@ public class ClientCredentialsTest {
         map.add("client_id","client_id");
         map.add("client_secret", "client_secret");
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAK_URL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
+        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAKURL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
 
         assertEquals(tokenCollection.getAccessToken(),ClientCredentials.getToken("client_id", "client_secret").getAccessToken());
     }
@@ -101,7 +101,7 @@ public class ClientCredentialsTest {
         map.add("client_id","client_id");
         map.add("client_secret", "client_secret");
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAK_URL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
+        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAKURL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
         ClientCredentials.getToken("client_id", "client_secret");
     }
     @Test (expected = AuthenticationException.class)
@@ -115,7 +115,7 @@ public class ClientCredentialsTest {
         map.add("client_id","client_id");
         map.add("client_secret", "client_secret");
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAK_URL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
+        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAKURL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
         ClientCredentials.getToken("client_id", "client_secret");
     }
 }

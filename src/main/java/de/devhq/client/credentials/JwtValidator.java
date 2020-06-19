@@ -17,9 +17,9 @@ public class JwtValidator {
     private static final Logger logger = LoggerFactory.getLogger(JwtValidator.class);
 
     public static int extractUserIdFromJwt(){
-        AbstractAuthenticationToken authenticationToken = (AbstractAuthenticationToken) TokenManagerProperties.SECURITY_CONTEXT.getAuthentication();
+        AbstractAuthenticationToken authenticationToken = (AbstractAuthenticationToken) TokenManagerProperties.SECURITYCONTEXT.getAuthentication();
         SimpleKeycloakAccount details = (SimpleKeycloakAccount) authenticationToken.getDetails();
-        String value = (String)details.getKeycloakSecurityContext().getToken().getOtherClaims().get(TokenManagerProperties.USER_ID);
+        String value = (String)details.getKeycloakSecurityContext().getToken().getOtherClaims().get(TokenManagerProperties.USERID);
         if (value == null) {
             logger.error("Requesting client is not an end user, hence token does not contain gitlab user id!");
             throw new ValidationException();
@@ -37,11 +37,11 @@ public class JwtValidator {
     }
 
     public static boolean isInternalUser(HttpServletRequest request) {
-        return request.isUserInRole(TokenManagerProperties.MACHINE_ROLE) || request.isUserInRole(TokenManagerProperties.ADMIN_ROLE);
+        return request.isUserInRole(TokenManagerProperties.MACHINEROLE) || request.isUserInRole(TokenManagerProperties.ADMINROLE);
     }
 
     public static boolean isExternalUser(HttpServletRequest request) {
-        return !(request.isUserInRole(TokenManagerProperties.MACHINE_ROLE) || request.isUserInRole(TokenManagerProperties.ADMIN_ROLE))
-                && request.isUserInRole(TokenManagerProperties.USER_ROLE);
+        return !(request.isUserInRole(TokenManagerProperties.MACHINEROLE) || request.isUserInRole(TokenManagerProperties.ADMINROLE))
+                && request.isUserInRole(TokenManagerProperties.USERROLE);
     }
 }

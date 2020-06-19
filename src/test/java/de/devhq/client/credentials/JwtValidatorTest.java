@@ -31,11 +31,11 @@ public class JwtValidatorTest {
     @Before
     public void setUp(){
         securityContext = Mockito.mock(SecurityContext.class);
-        ReflectionTestUtils.setField(tokenManagerProperties, "USER_ID", "gitlab_user_id");
-        ReflectionTestUtils.setField(tokenManagerProperties, "MACHINE_ROLE", "MACHINE_ROLE");
-        ReflectionTestUtils.setField(tokenManagerProperties, "ADMIN_ROLE", "ADMIN_ROLE");
-        ReflectionTestUtils.setField(tokenManagerProperties, "USER_ROLE", "USER_ROLE");
-        ReflectionTestUtils.setField(tokenManagerProperties, "SECURITY_CONTEXT", securityContext);
+        ReflectionTestUtils.setField(tokenManagerProperties, "USERID", "gitlab_user_id");
+        ReflectionTestUtils.setField(tokenManagerProperties, "MACHINEROLE", "MACHINE_ROLE");
+        ReflectionTestUtils.setField(tokenManagerProperties, "ADMINROLE", "ADMIN_ROLE");
+        ReflectionTestUtils.setField(tokenManagerProperties, "USERROLE", "USER_ROLE");
+        ReflectionTestUtils.setField(tokenManagerProperties, "SECURITYCONTEXT", securityContext);
 
     }
 
