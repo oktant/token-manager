@@ -7,7 +7,7 @@ python:
   
 addons:
   sonarcloud:
-    organization: "notification-system"
+    organization: "oktayalizada"
     token: $SONAR_TOKEN
 
 script:
