@@ -1,0 +1,19 @@
+sudo: required
+language: java
+dist: bionic
+jdk: openjdk8
+python:
+  - 3.8
+
+env:
+  NOSY_AUTH_IMAGE: nosy-auth:2.4
+  
+addons:
+  sonarcloud:
+    organization: "notification-system"
+    token: $SONAR_TOKEN
+
+script:
+  # JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
+  - ./mvnw clean install -B
+  - mvn clean verify sonar:sonar -Pcoverage 
