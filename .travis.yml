@@ -1,0 +1,13 @@
+sudo: required
+language: java
+dist: bionic
+jdk: openjdk8
+  
+addons:
+  sonarcloud:
+    organization: "oktayalizada"
+    token: $SONAR_TOKEN
+
+script:
+  - mvn clean verify sonar:sonar -Pcoverage 
+  - mvn package
