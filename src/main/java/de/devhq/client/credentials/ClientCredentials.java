@@ -31,7 +31,7 @@ public class ClientCredentials {
 
     public static TokenCollection getToken(String clientId, String clientSecret) throws IOException {
             ResponseEntity<TokenCollection> tokenCollectionCurrent = getTokenCollection(clientId, clientSecret);
-            if (tokenCollectionCurrent == null || tokenCollectionCurrent.getBody() == null || tokenCollectionCurrent.getBody().getAccessToken() == null) {
+            if (tokenCollectionCurrent.getBody() == null || tokenCollectionCurrent.getBody().getAccessToken() == null) {
                 throw new AuthenticationException();
             }
             return tokenCollectionCurrent.getBody();
@@ -45,12 +45,10 @@ public class ClientCredentials {
         map.add("client_id",clientId);
         map.add("client_secret", clientSecret);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-        ResponseEntity<TokenCollection> response =
-                TokenManagerProperties.REST_TEMPLATE.exchange(TokenManagerProperties.KEYCLOAK_URL,
-                        HttpMethod.POST,
-                        entity,
-                        TokenCollection.class);
-        return response;
+        return TokenManagerProperties.REST_TEMPLATE.exchange(TokenManagerProperties.KEYCLOAK_URL,
+                HttpMethod.POST,
+                entity,
+                TokenCollection.class);
     }
 
 }

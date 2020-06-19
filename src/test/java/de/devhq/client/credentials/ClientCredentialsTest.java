@@ -115,7 +115,7 @@ public class ClientCredentialsTest {
         map.add("client_id","client_id");
         map.add("client_secret", "client_secret");
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAK_URL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(null);
+        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAK_URL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
         ClientCredentials.getToken("client_id", "client_secret");
     }
 }

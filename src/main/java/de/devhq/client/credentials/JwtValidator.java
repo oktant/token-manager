@@ -14,9 +14,9 @@ public class JwtValidator {
     private JwtValidator(){
     }
 
-    public static Logger logger = LoggerFactory.getLogger(JwtValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtValidator.class);
 
-    public static int extractUserIdFromJwt() throws ValidationException {
+    public static int extractUserIdFromJwt(){
         AbstractAuthenticationToken authenticationToken = (AbstractAuthenticationToken) TokenManagerProperties.SECURITY_CONTEXT.getAuthentication();
         SimpleKeycloakAccount details = (SimpleKeycloakAccount) authenticationToken.getDetails();
         String value = (String)details.getKeycloakSecurityContext().getToken().getOtherClaims().get(TokenManagerProperties.USER_ID);
