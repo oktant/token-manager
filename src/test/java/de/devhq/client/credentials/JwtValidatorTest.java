@@ -108,4 +108,25 @@ public class JwtValidatorTest {
         HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
         assertFalse(JwtValidator.isExternalUser(httpServletRequest));
     }
+
+    @Test
+    public void isExternalUserMachineRole() {
+        HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
+        when(httpServletRequest.isUserInRole("MACHINE_ROLE")).thenReturn(true);
+        assertFalse(JwtValidator.isExternalUser(httpServletRequest));
+    }
+
+    @Test
+    public void isExternalUserAdminRole() {
+        HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
+        when(httpServletRequest.isUserInRole("ADMIN_ROLE")).thenReturn(true);
+        assertFalse(JwtValidator.isExternalUser(httpServletRequest));
+    }
+
+    @Test
+    public void isExternalUserUserRole() {
+        HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
+        when(httpServletRequest.isUserInRole("USER_ROLE")).thenReturn(true);
+        assertTrue(JwtValidator.isExternalUser(httpServletRequest));
+    }
 }
