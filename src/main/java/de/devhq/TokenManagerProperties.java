@@ -9,23 +9,23 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class TokenManagerProperties {
-    public static String USERID;
-    public static String MACHINEROLE;
-    public static String ADMINROLE;
-    public static String USERROLE;
-    public static String KEYCLOAKURL;
-    public static SecurityContext SECURITYCONTEXT;
-    public static RestTemplate RESTTEMPLATE;
+    public static String userId;
+    public static String machineRole;
+    public static String adminRole;
+    public static String userRole;
+    public static String keycloakUrl;
+    public static SecurityContext securityContext;
+    public static RestTemplate restTemplate;
 
     public static void setUp() throws IOException {
         Properties prop = readPropertiesFile();
-        MACHINEROLE=prop.getProperty("de.devhq.role.machine");
-        ADMINROLE=prop.getProperty("de.devhq.role.admin");
-        USERROLE=prop.getProperty("de.devhq.role.user");
-        USERID = prop.getProperty("de.devhq.user.id");
-        KEYCLOAKURL = prop.getProperty("de.devhq.keycloak.url");
-        SECURITYCONTEXT = SecurityContextHolder.getContext();
-        RESTTEMPLATE = new RestTemplate();
+        machineRole=prop.getProperty("de.devhq.role.machine");
+        adminRole=prop.getProperty("de.devhq.role.admin");
+        userRole=prop.getProperty("de.devhq.role.user");
+        userId = prop.getProperty("de.devhq.user.id");
+        keycloakUrl = prop.getProperty("de.devhq.keycloak.url");
+        securityContext = SecurityContextHolder.getContext();
+        restTemplate = new RestTemplate();
     }
     private TokenManagerProperties(){
     }

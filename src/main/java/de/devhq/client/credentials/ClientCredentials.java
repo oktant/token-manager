@@ -45,7 +45,7 @@ public class ClientCredentials {
         map.add("client_id",clientId);
         map.add("client_secret", clientSecret);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-        return TokenManagerProperties.RESTTEMPLATE.exchange(TokenManagerProperties.KEYCLOAKURL,
+        return TokenManagerProperties.restTemplate.exchange(TokenManagerProperties.keycloakUrl,
                 HttpMethod.POST,
                 entity,
                 TokenCollection.class);
