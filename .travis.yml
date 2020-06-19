@@ -10,3 +10,4 @@ addons:
 
 script:
   - mvn clean verify sonar:sonar -Pcoverage 
+  - mvn package
