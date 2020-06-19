@@ -30,14 +30,14 @@ public class ClientCredentials {
     }
 
     public static TokenCollection getToken(String clientId, String clientSecret) throws IOException {
-            TokenCollection tokenCollectionCurrent = getTokenCollection(clientId, clientSecret);
-            if (tokenCollectionCurrent == null || tokenCollectionCurrent.getAccessToken() == null) {
+            ResponseEntity<TokenCollection> tokenCollectionCurrent = getTokenCollection(clientId, clientSecret);
+            if (tokenCollectionCurrent == null || tokenCollectionCurrent.getBody() == null || tokenCollectionCurrent.getBody().getAccessToken() == null) {
                 throw new AuthenticationException();
             }
-            return tokenCollectionCurrent;
+            return tokenCollectionCurrent.getBody();
     }
 
-    private static TokenCollection getTokenCollection(String clientId, String clientSecret) {
+    private static ResponseEntity<TokenCollection> getTokenCollection(String clientId, String clientSecret) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -50,7 +50,7 @@ public class ClientCredentials {
                         HttpMethod.POST,
                         entity,
                         TokenCollection.class);
-        return response.getBody();
+        return response;
     }
 
 }

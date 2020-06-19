@@ -104,4 +104,18 @@ public class ClientCredentialsTest {
         when(restTemplate.exchange(TokenManagerProperties.KEYCLOAK_URL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
         ClientCredentials.getToken("client_id", "client_secret");
     }
+    @Test (expected = AuthenticationException.class)
+    public void getTokenWithNull() throws IOException {
+        TokenCollection tokenCollection=null;
+        ResponseEntity<TokenCollection> tokenCollectionResponseEntity=new ResponseEntity<>(tokenCollection, HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("grant_type","client_credentials");
+        map.add("client_id","client_id");
+        map.add("client_secret", "client_secret");
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
+        when(restTemplate.exchange(TokenManagerProperties.KEYCLOAK_URL, HttpMethod.POST, entity, TokenCollection.class)).thenReturn(null);
+        ClientCredentials.getToken("client_id", "client_secret");
+    }
 }
