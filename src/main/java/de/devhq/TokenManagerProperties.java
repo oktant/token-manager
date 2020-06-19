@@ -18,7 +18,7 @@ public class TokenManagerProperties {
     public static RestTemplate RESTTEMPLATE;
 
     public static void setUp() throws IOException {
-        Properties prop = readPropertiesFile("application.properties");
+        Properties prop = readPropertiesFile();
         MACHINEROLE=prop.getProperty("de.devhq.role.machine");
         ADMINROLE=prop.getProperty("de.devhq.role.admin");
         USERROLE=prop.getProperty("de.devhq.role.user");
@@ -30,12 +30,12 @@ public class TokenManagerProperties {
     private TokenManagerProperties(){
     }
 
-    public static java.util.Properties readPropertiesFile(String fileName) throws IOException {
+    private static Properties readPropertiesFile() throws IOException {
         InputStream fis = null;
         java.util.Properties prop = null;
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            fis = loader.getResourceAsStream(fileName);
+            fis = loader.getResourceAsStream("application.properties");
             prop = new java.util.Properties();
             prop.load(fis);
         } catch(IOException fnfe) {
