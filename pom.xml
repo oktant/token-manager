@@ -6,8 +6,12 @@
     <properties>
         <spring.boot.version>2.3.1.RELEASE</spring.boot.version>
         <jackson.core.version>2.11.0</jackson.core.version>
-
     </properties>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>
     <groupId>io.github.oktayalizada</groupId>
     <artifactId>token-manager</artifactId>
     <version>1.0</version>
@@ -106,5 +110,10 @@
             </build>
         </profile>
     </profiles>
-
+    <scm>
+        <connection>scm:git:https://github.com/oktayalizada/token-manager</connection>
+        <developerConnection>scm:git:git@github.com:oktayalizada/token-manager.git</developerConnection>
+        <url>https://github.com/oktayalizada/token-manager</url>
+        <tag>HEAD</tag>
+    </scm>
 </project>
