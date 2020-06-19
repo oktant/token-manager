@@ -5,8 +5,6 @@ import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
 
@@ -18,18 +16,17 @@ public class JwtValidator {
 
     public static Logger logger = LoggerFactory.getLogger(JwtValidator.class);
 
-    public static Integer extractUserIdFromJwt() throws ValidationException {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        AbstractAuthenticationToken authenticationToken = (AbstractAuthenticationToken) securityContext.getAuthentication();
+    public static int extractUserIdFromJwt() throws ValidationException {
+        AbstractAuthenticationToken authenticationToken = (AbstractAuthenticationToken) TokenManagerProperties.SECURITY_CONTEXT.getAuthentication();
         SimpleKeycloakAccount details = (SimpleKeycloakAccount) authenticationToken.getDetails();
-        Object value = details.getKeycloakSecurityContext().getToken().getOtherClaims().get(TokenManagerProperties.USER_ID);
+        String value = (String)details.getKeycloakSecurityContext().getToken().getOtherClaims().get(TokenManagerProperties.USER_ID);
         if (value == null) {
             logger.error("Requesting client is not an end user, hence token does not contain gitlab user id!");
             throw new ValidationException();
         }
 
         int userId;
-        userId = Integer.parseInt((String) value);
+        userId = Integer.parseInt(value);
 
         if (userId <= 0) {
             logger.error("User id may not be none positive number! API seems to be hacked! Please report this to admin");
@@ -47,6 +44,4 @@ public class JwtValidator {
         return !(request.isUserInRole(TokenManagerProperties.MACHINE_ROLE) || request.isUserInRole(TokenManagerProperties.ADMIN_ROLE))
                 && request.isUserInRole(TokenManagerProperties.USER_ROLE);
     }
-
-
 }

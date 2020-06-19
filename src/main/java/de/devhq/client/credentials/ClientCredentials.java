@@ -1,82 +1,59 @@
 package de.devhq.client.credentials;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.devhq.TokenManagerProperties;
 import de.devhq.model.TokenCollection;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.util.Objects;
 
-import static java.util.Arrays.asList;
 
 public class ClientCredentials {
+    private static TokenCollection tokenCollection;
 
     private ClientCredentials()  {
     }
 
-    public static HttpHeaders getHttpHeaders(String clientId, String clientSecret){
-
-        TokenCollection tokenCollection=new TokenCollection();
+    public static HttpHeaders getHttpHeaders(String clientId, String clientSecret) throws IOException {
+        TokenCollection tokenCollection;
         HttpHeaders httpHeaders = new HttpHeaders();
-        try{
-            tokenCollection=getToken(clientId, clientSecret);
-        } catch (IOException e) {
-            e.printStackTrace();
+        tokenCollection=getToken(clientId, clientSecret);
+        if (Objects.requireNonNull(tokenCollection.getAccessToken()).length()>1) {
+            httpHeaders.set("Authorization", tokenCollection.getAccessToken());
+        }else {
+            throw new AuthenticationException();
         }
-        httpHeaders.set("Authorization", tokenCollection.getAccessToken());
+
         return httpHeaders;
     }
-    private static TokenCollection tokenCollection;
 
     public static TokenCollection getToken(String clientId, String clientSecret) throws IOException {
-            HttpPost post = getPost(clientId, clientSecret);
-            TokenCollection tokenCollectionCurrent = getTokenCollection(post);
+            TokenCollection tokenCollectionCurrent = getTokenCollection(clientId, clientSecret);
             if (tokenCollectionCurrent == null || tokenCollectionCurrent.getAccessToken() == null) {
                 throw new AuthenticationException();
             }
-            return getTokenCollection(post);
+            return tokenCollectionCurrent;
     }
 
-    private static TokenCollection getTokenCollection(HttpPost post) throws IOException {
-        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            return httpclient.execute(
-                    post,
-                    response -> {
-                        ObjectMapper mapper = new ObjectMapper();
-                        int status = response.getStatusLine().getStatusCode();
-
-                        if (status >= 200 && status < 300) {
-                            tokenCollection =
-                                    mapper.readValue(response.getEntity().getContent(), TokenCollection.class);
-
-                            return tokenCollection;
-
-                        } else {
-                            return null;
-                        }
-                    });
-        }
+    private static TokenCollection getTokenCollection(String clientId, String clientSecret) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("grant_type","client_credentials");
+        map.add("client_id",clientId);
+        map.add("client_secret", clientSecret);
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
+        ResponseEntity<TokenCollection> response =
+                TokenManagerProperties.REST_TEMPLATE.exchange(TokenManagerProperties.KEYCLOAK_URL,
+                        HttpMethod.POST,
+                        entity,
+                        TokenCollection.class);
+        return response.getBody();
     }
 
-    private static HttpPost getPost(String clientId, String clientSecret) throws UnsupportedEncodingException {
-        HttpPost post = new HttpPost(TokenManagerProperties.KEYCLOAK_URL);
-        List<NameValuePair> params =
-                asList(
-                        new BasicNameValuePair("grant_type", "client_credentials"),
-                        new BasicNameValuePair("client_id", clientId),
-                        new BasicNameValuePair("client_secret", clientSecret));
-
-        post.setEntity(new UrlEncodedFormEntity(params));
-        post.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        return post;
-    }
 }

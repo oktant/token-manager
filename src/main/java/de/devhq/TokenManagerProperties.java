@@ -1,5 +1,9 @@
 package de.devhq;
 
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.client.RestTemplate;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -10,6 +14,8 @@ public class TokenManagerProperties {
     public static String ADMIN_ROLE;
     public static String USER_ROLE;
     public static String KEYCLOAK_URL;
+    public static SecurityContext SECURITY_CONTEXT;
+    public static RestTemplate REST_TEMPLATE;
 
     public static void setUp() throws IOException {
         Properties prop = readPropertiesFile("application.properties");
@@ -18,6 +24,10 @@ public class TokenManagerProperties {
         USER_ROLE=prop.getProperty("de.devhq.role.user");
         USER_ID = prop.getProperty("de.devhq.user.id");
         KEYCLOAK_URL = prop.getProperty("de.devhq.keycloak.url");
+        SECURITY_CONTEXT = SecurityContextHolder.getContext();
+        REST_TEMPLATE = new RestTemplate();
+
+
     }
 
     public static java.util.Properties readPropertiesFile(String fileName) throws IOException {
