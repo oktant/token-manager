@@ -11,5 +11,4 @@ addons:
     token: $SONAR_TOKEN
 
 script:
-  - ./mvnw clean install -B
   - mvn clean verify sonar:sonar -Pcoverage 
