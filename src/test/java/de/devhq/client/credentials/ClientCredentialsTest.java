@@ -69,7 +69,7 @@ public class ClientCredentialsTest {
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
         when(restTemplate.exchange(TokenManagerProperties.getKeycloakUrl(), HttpMethod.POST, entity, TokenCollection.class)).thenReturn(tokenCollectionResponseEntity);
 
-        assertEquals(tokenCollection.getAccessToken(), ClientCredentials.getHttpHeaders("client_id", "client_secret").get("Authorization").get(0));
+        assertEquals("Bearer "+tokenCollection.getAccessToken(), ClientCredentials.getHttpHeaders("client_id", "client_secret").get("Authorization").get(0));
     }
 
     @Test
