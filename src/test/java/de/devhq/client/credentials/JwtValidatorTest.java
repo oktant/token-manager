@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.keycloak.representations.AccessToken;
-
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -28,8 +27,9 @@ public class JwtValidatorTest {
     @Mock
     TokenManagerProperties tokenManagerProperties;
     SecurityContext securityContext;
+
     @Before
-    public void setUp(){
+    public void setUp() {
         securityContext = Mockito.mock(SecurityContext.class);
         ReflectionTestUtils.setField(tokenManagerProperties, "userId", "gitlab_user_id");
         ReflectionTestUtils.setField(tokenManagerProperties, "machineRole", "MACHINE_ROLE");
@@ -43,8 +43,8 @@ public class JwtValidatorTest {
     public void extractUserIdFromJwtWithNullClaims() {
         AbstractAuthenticationToken authentication = Mockito.mock(AbstractAuthenticationToken.class);
         SimpleKeycloakAccount simpleKeycloakAccount = mock(SimpleKeycloakAccount.class);
-        AccessToken accessToken=mock(AccessToken.class);
-        RefreshableKeycloakSecurityContext refreshableKeycloakSecurityContext=mock(RefreshableKeycloakSecurityContext.class);
+        AccessToken accessToken = mock(AccessToken.class);
+        RefreshableKeycloakSecurityContext refreshableKeycloakSecurityContext = mock(RefreshableKeycloakSecurityContext.class);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getDetails()).thenReturn(simpleKeycloakAccount);
         when(simpleKeycloakAccount.getKeycloakSecurityContext()).thenReturn(refreshableKeycloakSecurityContext);
@@ -56,9 +56,9 @@ public class JwtValidatorTest {
     public void extractUserIdFromJwt() {
         AbstractAuthenticationToken authentication = Mockito.mock(AbstractAuthenticationToken.class);
         SimpleKeycloakAccount simpleKeycloakAccount = mock(SimpleKeycloakAccount.class);
-        AccessToken accessToken=new AccessToken();
+        AccessToken accessToken = new AccessToken();
         accessToken.setOtherClaims("gitlab_user_id", "1");
-        RefreshableKeycloakSecurityContext refreshableKeycloakSecurityContext=mock(RefreshableKeycloakSecurityContext.class);
+        RefreshableKeycloakSecurityContext refreshableKeycloakSecurityContext = mock(RefreshableKeycloakSecurityContext.class);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getDetails()).thenReturn(simpleKeycloakAccount);
         when(simpleKeycloakAccount.getKeycloakSecurityContext()).thenReturn(refreshableKeycloakSecurityContext);
@@ -70,9 +70,9 @@ public class JwtValidatorTest {
     public void extractUserIdFromJwtWith0() {
         AbstractAuthenticationToken authentication = Mockito.mock(AbstractAuthenticationToken.class);
         SimpleKeycloakAccount simpleKeycloakAccount = mock(SimpleKeycloakAccount.class);
-        AccessToken accessToken=new AccessToken();
+        AccessToken accessToken = new AccessToken();
         accessToken.setOtherClaims("gitlab_user_id", "0");
-        RefreshableKeycloakSecurityContext refreshableKeycloakSecurityContext=mock(RefreshableKeycloakSecurityContext.class);
+        RefreshableKeycloakSecurityContext refreshableKeycloakSecurityContext = mock(RefreshableKeycloakSecurityContext.class);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getDetails()).thenReturn(simpleKeycloakAccount);
         when(simpleKeycloakAccount.getKeycloakSecurityContext()).thenReturn(refreshableKeycloakSecurityContext);
@@ -83,21 +83,22 @@ public class JwtValidatorTest {
 
     @Test
     public void isInternalUser() {
-        HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         assertFalse(JwtValidator.isInternalUser(httpServletRequest));
 
     }
 
     @Test
     public void isInternalUserMachineRole() {
-        HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         when(httpServletRequest.isUserInRole("MACHINE_ROLE")).thenReturn(true);
         assertTrue(JwtValidator.isInternalUser(httpServletRequest));
 
     }
+
     @Test
     public void isInternalUserMAdminRole() {
-        HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         when(httpServletRequest.isUserInRole("ADMIN_ROLE")).thenReturn(true);
         assertTrue(JwtValidator.isInternalUser(httpServletRequest));
 
@@ -105,27 +106,27 @@ public class JwtValidatorTest {
 
     @Test
     public void isExternalUser() {
-        HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         assertFalse(JwtValidator.isExternalUser(httpServletRequest));
     }
 
     @Test
     public void isExternalUserMachineRole() {
-        HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         when(httpServletRequest.isUserInRole("MACHINE_ROLE")).thenReturn(true);
         assertFalse(JwtValidator.isExternalUser(httpServletRequest));
     }
 
     @Test
     public void isExternalUserAdminRole() {
-        HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         when(httpServletRequest.isUserInRole("ADMIN_ROLE")).thenReturn(true);
         assertFalse(JwtValidator.isExternalUser(httpServletRequest));
     }
 
     @Test
     public void isExternalUserUserRole() {
-        HttpServletRequest httpServletRequest=mock(HttpServletRequest.class);
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         when(httpServletRequest.isUserInRole("USER_ROLE")).thenReturn(true);
         assertTrue(JwtValidator.isExternalUser(httpServletRequest));
     }

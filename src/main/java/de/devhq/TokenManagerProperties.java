@@ -17,6 +17,9 @@ public class TokenManagerProperties {
     private static SecurityContext securityContext;
     private static RestTemplate restTemplate;
 
+    private TokenManagerProperties() {
+    }
+
     public static String getUserId() {
         return userId;
     }
@@ -47,15 +50,16 @@ public class TokenManagerProperties {
 
     public static void setUp() throws IOException {
         Properties prop = readPropertiesFile();
-        machineRole=prop.getProperty("de.devhq.role.machine");
-        adminRole=prop.getProperty("de.devhq.role.admin");
-        userRole=prop.getProperty("de.devhq.role.user");
+        machineRole = prop.getProperty("de.devhq.role.machine");
+        adminRole = prop.getProperty("de.devhq.role.admin");
+        userRole = prop.getProperty("de.devhq.role.user");
         userId = prop.getProperty("de.devhq.user.id");
         keycloakUrl = prop.getProperty("de.devhq.keycloak.url");
-        securityContext = SecurityContextHolder.getContext();
         restTemplate = new RestTemplate();
     }
-    private TokenManagerProperties(){
+
+    public static void setSecurityContext() {
+        securityContext = SecurityContextHolder.getContext();
     }
 
     private static Properties readPropertiesFile() throws IOException {
@@ -66,7 +70,7 @@ public class TokenManagerProperties {
             fis = loader.getResourceAsStream("application.properties");
             prop = new java.util.Properties();
             prop.load(fis);
-        } catch(IOException fnfe) {
+        } catch (IOException fnfe) {
             fnfe.printStackTrace();
         } finally {
             assert fis != null;
