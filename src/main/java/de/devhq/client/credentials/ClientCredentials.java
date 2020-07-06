@@ -21,7 +21,7 @@ public class ClientCredentials {
         HttpHeaders httpHeaders = new HttpHeaders();
         tokenCollection = getToken(clientId, clientSecret);
         if (Objects.requireNonNull(tokenCollection.getAccessToken()).length() > 1) {
-            httpHeaders.set("Authorization", tokenCollection.getAccessToken());
+            httpHeaders.set("Authorization", "Bearer " + tokenCollection.getAccessToken());
         } else {
             throw new AuthenticationException();
         }
