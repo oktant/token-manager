@@ -50,12 +50,20 @@ public class TokenManagerProperties {
 
     public static void setUp() throws IOException {
         Properties prop = readPropertiesFile();
-        machineRole = prop.getProperty("de.devhq.role.machine");
-        adminRole = prop.getProperty("de.devhq.role.admin");
-        userRole = prop.getProperty("de.devhq.role.user");
-        userId = prop.getProperty("de.devhq.user.id");
-        keycloakUrl = prop.getProperty("de.devhq.keycloak.url");
+        machineRole = getParameter(prop.getProperty("de.devhq.role.machine"));
+        adminRole = getParameter(prop.getProperty("de.devhq.role.admin"));
+        userRole = getParameter(prop.getProperty("de.devhq.role.user"));
+        userId = getParameter(prop.getProperty("de.devhq.user.id"));
+        keycloakUrl = getParameter(prop.getProperty("de.devhq.keycloak.url"));
         restTemplate = new RestTemplate();
+    }
+
+    private static String getParameter(String property){
+        if(property.startsWith("${")){
+           String secondSide=property.split(":", 2)[1];
+            return secondSide.substring(0,secondSide.length()-1);
+        }
+        return property;
     }
 
     public static void setSecurityContext() {
